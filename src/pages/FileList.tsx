@@ -77,18 +77,18 @@ const FileList: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('files', language)}</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-3xl font-bold text-white">{t('files', language)}</h1>
+          <p className="text-gray-400 mt-1">
             {filteredAndSortedFiles.length} ملف متاح
           </p>
         </div>
         
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          <div className="flex items-center space-x-1 rtl:space-x-reverse bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center space-x-1 rtl:space-x-reverse bg-gray-800 rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-md transition-colors ${
-                viewMode === 'grid' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                viewMode === 'grid' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white'
               }`}
             >
               <Grid className="h-4 w-4" />
@@ -96,7 +96,7 @@ const FileList: React.FC = () => {
             <button
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-md transition-colors ${
-                viewMode === 'list' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                viewMode === 'list' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white'
               }`}
             >
               <List className="h-4 w-4" />
@@ -106,7 +106,7 @@ const FileList: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-gray-800 border border-gray-700 p-6 rounded-xl">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Categories */}
           <div className="flex flex-wrap gap-2">
@@ -117,7 +117,7 @@ const FileList: React.FC = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   (selectedCategory === category) || (selectedCategory === '' && category === 'الكل')
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
               >
                 {category}
@@ -128,8 +128,8 @@ const FileList: React.FC = () => {
           {/* Sort Options */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <Filter className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-600">ترتيب حسب:</span>
+              <Filter className="h-4 w-4 text-gray-400" />
+              <span className="text-sm text-gray-400">ترتيب حسب:</span>
             </div>
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               {[
@@ -144,7 +144,7 @@ const FileList: React.FC = () => {
                   className={`flex items-center space-x-1 rtl:space-x-reverse px-3 py-1 rounded-lg text-sm transition-colors ${
                     sortBy === option.key
                       ? 'bg-blue-600 text-white'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      : 'text-gray-400 hover:bg-gray-700 hover:text-white'
                   }`}
                 >
                   <span>{option.label}</span>
@@ -174,9 +174,9 @@ const FileList: React.FC = () => {
       {/* Empty State */}
       {filteredAndSortedFiles.length === 0 && (
         <div className="text-center py-12">
-          <div className="text-gray-400 text-6xl mb-4">📁</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">لا توجد ملفات</h3>
-          <p className="text-gray-600">جرب تعديل معايير البحث أو الفلترة</p>
+          <div className="text-gray-500 text-6xl mb-4">📁</div>
+          <h3 className="text-xl font-semibold text-white mb-2">لا توجد ملفات</h3>
+          <p className="text-gray-400">جرب تعديل معايير البحث أو الفلترة</p>
         </div>
       )}
     </div>

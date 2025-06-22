@@ -8,7 +8,7 @@ const Layout: React.FC = () => {
   const { language } = useApp();
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen bg-gray-900 ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Header />
       <div className="flex">
         <Sidebar />

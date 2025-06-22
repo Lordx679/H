@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import FileList from './pages/FileList';
 import FileDetail from './pages/FileDetail';
 import UploadFile from './pages/UploadFile';
+import ManageFiles from './pages/ManageFiles';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="files" element={<FileList />} />
             <Route path="file/:id" element={<FileDetail />} />
             <Route path="upload" element={<UploadFile />} />
+            <Route path="manage" element={<ManageFiles />} />
           </Route>
         </Routes>
       </Router>

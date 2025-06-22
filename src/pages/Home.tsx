@@ -6,25 +6,35 @@ import { t } from '../utils/translations';
 import FileCard from '../components/FileCard';
 
 const Home: React.FC = () => {
-  const { language, files } = useApp();
+  const { language, files, stats } = useApp();
 
   const featuredFiles = files.slice(0, 3);
   const popularFiles = files.slice(0, 6);
 
   const categories = [
-    { name: 'تصميم', icon: '🎨', count: 45, color: 'bg-purple-100 text-purple-800' },
-    { name: 'أدوات النظام', icon: '⚙️', count: 32, color: 'bg-red-100 text-red-800' },
-    { name: 'برمجة', icon: '💻', count: 28, color: 'bg-green-100 text-green-800' },
-    { name: 'وسائط', icon: '🎵', count: 56, color: 'bg-blue-100 text-blue-800' },
-    { name: 'ألعاب', icon: '🎮', count: 23, color: 'bg-orange-100 text-orange-800' },
-    { name: 'مكتبية', icon: '📄', count: 19, color: 'bg-gray-100 text-gray-800' }
+    { name: 'تصميم', icon: '🎨', count: files.filter(f => f.category === 'تصميم').length, color: 'bg-purple-900 text-purple-300 border-purple-700' },
+    { name: 'أدوات النظام', icon: '⚙️', count: files.filter(f => f.category === 'أدوات النظام').length, color: 'bg-red-900 text-red-300 border-red-700' },
+    { name: 'برمجة', icon: '💻', count: files.filter(f => f.category === 'برمجة').length, color: 'bg-green-900 text-green-300 border-green-700' },
+    { name: 'وسائط', icon: '🎵', count: files.filter(f => f.category === 'وسائط').length, color: 'bg-blue-900 text-blue-300 border-blue-700' },
+    { name: 'ألعاب', icon: '🎮', count: files.filter(f => f.category === 'ألعاب').length, color: 'bg-orange-900 text-orange-300 border-orange-700' },
+    { name: 'مكتبية', icon: '📄', count: files.filter(f => f.category === 'مكتبية').length, color: 'bg-gray-700 text-gray-300 border-gray-600' }
   ];
 
-  const stats = [
-    { label: 'إجمالي الملفات', value: '1,245', icon: FolderOpen, color: 'text-blue-600' },
-    { label: 'التحميلات', value: '89K', icon: Download, color: 'text-green-600' },
-    { label: 'المستخدمين', value: '12K', icon: Users, color: 'text-purple-600' },
-    { label: 'النمو اليومي', value: '+156', icon: TrendingUp, color: 'text-orange-600' }
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+  };
+
+  const statsData = [
+    { label: 'إجمالي الملفات', value: stats.totalFiles.toString(), icon: FolderOpen, color: 'text-blue-400' },
+    { label: 'التحميلات', value: formatNumber(stats.totalDownloads), icon: Download, color: 'text-green-400' },
+    { label: 'المستخدمين', value: formatNumber(stats.totalUsers), icon: Users, color: 'text-purple-400' },
+    { label: 'النمو اليومي', value: '+' + stats.dailyGrowth, icon: TrendingUp, color: 'text-orange-400' }
   ];
 
   return (
@@ -52,13 +62,13 @@ const Home: React.FC = () => {
 
       {/* Stats Section */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
+        {statsData.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center">
+            <div key={index} className="bg-gray-800 border border-gray-700 p-6 rounded-xl text-center hover:bg-gray-750 transition-colors">
               <Icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
+              <div className="text-2xl font-bold text-white">{stat.value}</div>
+              <div className="text-sm text-gray-400">{stat.label}</div>
             </div>
           );
         })}
@@ -67,8 +77,8 @@ const Home: React.FC = () => {
       {/* Categories */}
       <div>
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">{t('categories', language)}</h2>
-          <Link to="/files" className="text-blue-600 hover:text-blue-700 font-medium">
+          <h2 className="text-3xl font-bold text-white">{t('categories', language)}</h2>
+          <Link to="/files" className="text-blue-400 hover:text-blue-300 font-medium">
             عرض الكل
           </Link>
         </div>
@@ -77,13 +87,13 @@ const Home: React.FC = () => {
             <Link
               key={index}
               to={`/files?category=${category.name}`}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-300 text-center group"
+              className={`${category.color} border p-6 rounded-xl hover:opacity-80 transition-all duration-300 text-center group`}
             >
               <div className="text-3xl mb-3">{category.icon}</div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-semibold group-hover:text-white transition-colors">
                 {category.name}
               </h3>
-              <p className="text-sm text-gray-600 mt-1">{category.count} ملف</p>
+              <p className="text-sm mt-1 opacity-75">{category.count} ملف</p>
             </Link>
           ))}
         </div>
@@ -92,8 +102,8 @@ const Home: React.FC = () => {
       {/* Featured Files */}
       <div>
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">{t('featuredFiles', language)}</h2>
-          <Link to="/files" className="text-blue-600 hover:text-blue-700 font-medium">
+          <h2 className="text-3xl font-bold text-white">{t('featuredFiles', language)}</h2>
+          <Link to="/files" className="text-blue-400 hover:text-blue-300 font-medium">
             عرض الكل
           </Link>
         </div>
@@ -107,8 +117,8 @@ const Home: React.FC = () => {
       {/* Popular Files */}
       <div>
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">{t('popularFiles', language)}</h2>
-          <Link to="/files" className="text-blue-600 hover:text-blue-700 font-medium">
+          <h2 className="text-3xl font-bold text-white">{t('popularFiles', language)}</h2>
+          <Link to="/files" className="text-blue-400 hover:text-blue-300 font-medium">
             عرض الكل
           </Link>
         </div>

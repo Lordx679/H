@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        'blue-600': '#2563eb',
-        'blue-700': '#1d4ed8',
-        'purple-600': '#9333ea',
+        'gray-750': '#374151',
+        'gray-850': '#1f2937',
+        'gray-950': '#111827',
       },
       fontFamily: {
         'arabic': ['Noto Sans Arabic', 'sans-serif'],

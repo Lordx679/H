@@ -35,7 +35,7 @@ const FileCard: React.FC<FileCardProps> = ({ file }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 group">
+    <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden hover:border-blue-500 transition-all duration-300 group">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -52,10 +52,10 @@ const FileCard: React.FC<FileCardProps> = ({ file }) => {
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+        <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
           {file.name}
         </h3>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+        <p className="text-sm text-gray-400 mb-4 line-clamp-2">
           {file.shortDescription}
         </p>
 
@@ -73,7 +73,7 @@ const FileCard: React.FC<FileCardProps> = ({ file }) => {
           </div>
           <div className="flex items-center space-x-1 rtl:space-x-reverse">
             <Star className="h-4 w-4 text-yellow-400 fill-current" />
-            <span className="font-medium">{file.rating}</span>
+            <span className="font-medium text-gray-300">{file.rating}</span>
           </div>
         </div>
 
