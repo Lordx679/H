@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className={`hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:pt-16 bg-gray-800 border-r border-gray-700 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
+    <aside className={`hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:pt-16 bg-dark-800/80 backdrop-blur-xl border-r border-dark-700/50 ${language === 'ar' ? 'rtl' : 'ltr'} animate-slide-right`}>
       <div className="flex flex-col flex-1 overflow-y-auto">
         <nav className="p-4 space-y-2">
           {navigationItems.map((item) => {
@@ -35,14 +35,17 @@ const Sidebar: React.FC = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-3 rtl:space-x-reverse px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center space-x-3 rtl:space-x-reverse px-3 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
                   isActive
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg'
+                    : 'text-secondary-300 hover:bg-dark-700/50 hover:text-white'
                 }`}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={`h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
                 <span className="font-medium">{item.label}</span>
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-400/20 to-accent-400/20 rounded-xl"></div>
+                )}
               </Link>
             );
           })}
@@ -50,11 +53,11 @@ const Sidebar: React.FC = () => {
 
         {/* Admin Badge */}
         {isAdmin && (
-          <div className="p-4 mt-auto">
-            <div className="bg-blue-900 border border-blue-700 rounded-lg p-3">
+          <div className="p-4 mt-auto animate-slide-up">
+            <div className="bg-gradient-to-r from-primary-900/50 to-accent-900/50 border border-primary-700/50 rounded-xl p-3 backdrop-blur-sm">
               <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <Shield className="h-4 w-4 text-blue-400" />
-                <span className="text-sm font-medium text-blue-300">وضع المدير</span>
+                <Shield className="h-4 w-4 text-primary-400" />
+                <span className="text-sm font-medium text-primary-300">وضع المدير</span>
               </div>
             </div>
           </div>

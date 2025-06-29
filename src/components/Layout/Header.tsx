@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Globe, FolderOpen, Shield, X } from 'lucide-react';
+import { Search, Globe, FolderOpen, Shield, X, User, LogOut } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { t } from '../../utils/translations';
 
@@ -21,6 +21,7 @@ const Header: React.FC = () => {
   } = useApp();
   
   const [adminPassword, setAdminPassword] = useState('');
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleLogoClick = () => {
     const newCount = clickCount + 1;
@@ -51,42 +52,44 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     setUser(null);
+    setShowUserMenu(false);
   };
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'ar' : 'en');
   };
 
-  const handleGoogleAuth = () => {
-    // Mock Google authentication
-    window.open('https://accounts.google.com/oauth/authorize?client_id=demo&redirect_uri=' + encodeURIComponent(window.location.origin), '_blank');
-  };
-
   return (
     <>
-      <header className={`bg-gray-900 shadow-lg border-b border-gray-700 sticky top-0 z-50 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
+      <header className={`bg-dark-900/95 backdrop-blur-xl shadow-xl border-b border-dark-700/50 sticky top-0 z-50 transition-all duration-300 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <button 
               onClick={handleLogoClick}
-              className="flex items-center space-x-2 rtl:space-x-reverse hover:opacity-80 transition-opacity"
+              className="flex items-center space-x-2 rtl:space-x-reverse hover:opacity-80 transition-all duration-300 hover:scale-105 group"
             >
-              <FolderOpen className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold text-white">مكتبة الملفات</span>
+              <div className="relative">
+                <FolderOpen className="h-8 w-8 text-primary-400 group-hover:text-primary-300 transition-colors duration-300" />
+                <div className="absolute inset-0 bg-primary-400/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
+                مكتبة الملفات
+              </span>
             </button>
 
             {/* Search Bar */}
             <div className="flex-1 max-w-2xl mx-8">
-              <div className="relative">
-                <Search className="absolute left-3 rtl:right-3 rtl:left-auto top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <div className="relative group">
+                <Search className="absolute left-3 rtl:right-3 rtl:left-auto top-1/2 transform -translate-y-1/2 text-secondary-400 h-5 w-5 group-focus-within:text-primary-400 transition-colors duration-300" />
                 <input
                   type="text"
                   placeholder={t('searchPlaceholder', language)}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 rtl:pr-10 rtl:pl-4 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-white placeholder-gray-400"
+                  className="w-full pl-10 rtl:pr-10 rtl:pl-4 pr-4 py-2 bg-dark-800/50 border border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 text-white placeholder-secondary-500 hover:border-dark-500 hover:bg-dark-700/50"
                 />
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary-500/10 to-accent-500/10 opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </div>
             </div>
 
@@ -94,63 +97,94 @@ const Header: React.FC = () => {
             <div className="flex items-center space-x-4 rtl:space-x-reverse">
               <button
                 onClick={toggleLanguage}
-                className="p-2 text-gray-300 hover:text-blue-400 transition-colors"
+                className="p-2 text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:bg-dark-700/50 rounded-lg"
                 title="تغيير اللغة"
               >
                 <Globe className="h-5 w-5" />
               </button>
 
               <nav className="hidden md:flex items-center space-x-6 rtl:space-x-reverse">
-                <Link to="/" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/" 
+                  className="text-secondary-300 hover:text-primary-400 transition-all duration-300 relative group"
+                >
                   {t('home', language)}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 group-hover:w-full transition-all duration-300"></span>
                 </Link>
-                <Link to="/files" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/files" 
+                  className="text-secondary-300 hover:text-primary-400 transition-all duration-300 relative group"
+                >
                   {t('files', language)}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 group-hover:w-full transition-all duration-300"></span>
                 </Link>
               </nav>
 
-              {/* Google Auth Button */}
-              {!isAuthenticated && (
-                <button
-                  onClick={handleGoogleAuth}
-                  className="flex items-center space-x-2 rtl:space-x-reverse bg-white hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-lg transition-colors font-medium"
-                >
-                  <svg className="h-4 w-4" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  <span>Google</span>
-                </button>
-              )}
-
-              {/* Admin Menu */}
-              {isAuthenticated && isAdmin && (
-                <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                  <Link
-                    to="/upload"
-                    className="flex items-center space-x-2 rtl:space-x-reverse bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-                  >
-                    <Shield className="h-4 w-4" />
-                    <span>{t('upload', language)}</span>
-                  </Link>
-                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                    <img
-                      src={user.avatar}
-                      alt={user.username}
-                      className="h-8 w-8 rounded-full"
-                    />
-                    <span className="text-sm font-medium text-white">{user.username}</span>
-                  </div>
+              {/* User Menu */}
+              {isAuthenticated ? (
+                <div className="relative">
                   <button
-                    onClick={handleLogout}
-                    className="p-2 text-gray-300 hover:text-red-400 transition-colors"
-                    title={t('logout', language)}
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center space-x-3 rtl:space-x-reverse p-2 hover:bg-dark-700/50 rounded-xl transition-all duration-300 group"
                   >
-                    <X className="h-5 w-5" />
+                    <img
+                      src={user?.avatar}
+                      alt={user?.username}
+                      className="h-8 w-8 rounded-full border-2 border-primary-400/50 group-hover:border-primary-400 transition-colors duration-300"
+                    />
+                    <span className="text-sm font-medium text-white hidden sm:block">{user?.username}</span>
+                    {isAdmin && (
+                      <Shield className="h-4 w-4 text-primary-400" />
+                    )}
                   </button>
+
+                  {/* Dropdown Menu */}
+                  {showUserMenu && (
+                    <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-48 bg-dark-800/95 backdrop-blur-xl border border-dark-700/50 rounded-xl shadow-xl py-2 animate-scale-in">
+                      <div className="px-4 py-2 border-b border-dark-700/50">
+                        <p className="text-sm font-medium text-white">{user?.username}</p>
+                        <p className="text-xs text-secondary-400">{user?.email}</p>
+                      </div>
+                      
+                      {isAdmin && (
+                        <>
+                          <Link
+                            to="/upload"
+                            className="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 text-sm text-secondary-300 hover:text-white hover:bg-dark-700/50 transition-colors duration-200"
+                            onClick={() => setShowUserMenu(false)}
+                          >
+                            <Shield className="h-4 w-4" />
+                            <span>{t('upload', language)}</span>
+                          </Link>
+                          <Link
+                            to="/manage"
+                            className="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 text-sm text-secondary-300 hover:text-white hover:bg-dark-700/50 transition-colors duration-200"
+                            onClick={() => setShowUserMenu(false)}
+                          >
+                            <FolderOpen className="h-4 w-4" />
+                            <span>إدارة الملفات</span>
+                          </Link>
+                        </>
+                      )}
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center space-x-2 rtl:space-x-reverse w-full px-4 py-2 text-sm text-error-400 hover:text-error-300 hover:bg-error-900/20 transition-colors duration-200"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>{t('logout', language)}</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center space-x-2 rtl:space-x-reverse bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-4 py-2 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg font-medium"
+                >
+                  <User className="h-4 w-4" />
+                  <span>تسجيل الدخول</span>
+                </Link>
               )}
             </div>
           </div>
@@ -159,27 +193,27 @@ const Header: React.FC = () => {
 
       {/* Admin Login Modal */}
       {showAdminLogin && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-dark-800/95 backdrop-blur-xl border border-dark-700/50 p-6 rounded-2xl shadow-2xl max-w-md w-full mx-4 animate-scale-in">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-white">تسجيل دخول المدير</h3>
               <button
                 onClick={() => setShowAdminLogin(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-secondary-400 hover:text-white transition-colors duration-200"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <form onSubmit={handleAdminLogin}>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-300 mb-2">
                   كلمة المرور
                 </label>
                 <input
                   type="password"
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                  className="w-full px-3 py-2 bg-dark-700/50 border border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white transition-all duration-300"
                   placeholder="أدخل كلمة المرور"
                   required
                 />
@@ -188,13 +222,13 @@ const Header: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowAdminLogin(false)}
-                  className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                  className="flex-1 px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-xl transition-colors duration-300"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl transition-all duration-300 hover:scale-105"
                 >
                   دخول
                 </button>
