@@ -8,6 +8,7 @@ import FileDetail from './pages/FileDetail';
 import UploadFile from './pages/UploadFile';
 import ManageFiles from './pages/ManageFiles';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import './styles/colors.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="files" element={<FileList />} />
