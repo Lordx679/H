@@ -22,6 +22,7 @@ const Layout: React.FC = () => {
         </main>
       </div>
     </div>
+  )
   );
 };
 
